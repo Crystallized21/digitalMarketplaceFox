@@ -1,9 +1,7 @@
-import { channel } from 'diagnostics_channel';
 import dotenv from 'dotenv';
 import path from "path";
-import payload from 'payload';
+import payload, {Payload} from 'payload';
 import {InitOptions} from "payload/config";
-import {convertArrayToHash} from "payload/dist/utilities/convertData";
 
 dotenv.config({
     path: path.resolve(__dirname, "../.env")
@@ -25,7 +23,7 @@ interface Args {
 
 export const getPayloadClient = async ({
     initOptions,
-}: Args = {}) => {
+}: Args = {}): Promise<Payload> => {
     if (!process.env.PAYLOAD_SECRET) {
         throw new Error("PAYLOAD_SECRET_KEY is missing")
     }

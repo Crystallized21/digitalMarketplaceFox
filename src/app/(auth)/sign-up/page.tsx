@@ -11,18 +11,27 @@ import {cn} from "@/lib/utils";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {AuthCredentialsValidator, TAuthCredentialsValidator} from "@/lib/validators/account-credentials-validator";
+import {trpc} from "@/trpc/client";
 
 const Page = () => {
     const {
         register,
         handleSubmit,
         formState: {errors}
-    } = useForm({
+    } = useForm<TAuthCredentialsValidator>({
         resolver: zodResolver(AuthCredentialsValidator),
     })
 
-    const onSubmit = ({email, password}: TAuthCredentialsValidator) => {
+    const {mutate, isLoading} = trpc.auth.createPayloadUser.useMutation({
+
+    })
+
+    const onSubmit = ({
+        email,
+        password
+    }: TAuthCredentialsValidator) => {
         // send data to server
+        mutate({email, password})
     }
 
     return (
@@ -63,6 +72,7 @@ const Page = () => {
                                     <Label htmlFor="email">Password</Label>
                                     <Input
                                         {...register("password")}
+                                        type="password"
                                         className={cn({
                                             "focus-visible:ring-red-500":
                                             errors.password,
