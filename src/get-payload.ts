@@ -51,7 +51,7 @@ export const getPayloadClient = async ({
                 fromName: "DigitalFox",
             },
             secret: process.env.PAYLOAD_SECRET,
-            local: initOptions?.express ? false : true,
+            local: !initOptions?.express,
             ...(initOptions || {}),
         })
     }
