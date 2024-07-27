@@ -5,10 +5,13 @@ import {Icons} from "@/components/Icons";
 import NavItems from "@/components/NavItems";
 import {buttonVariants} from "@/components/ui/button";
 import Cart from "@/components/Cart";
+import {getServerSideUser} from "@/lib/payload-utils";
+import {cookies} from "next/headers";
 
-const Navbar = () => {
+const Navbar = async () => {
 
-    const user = null
+    const  nextCookies = cookies()
+    const {user} = await getServerSideUser(nextCookies)
 
     return (
         <div className="bg-white sticky z-50 top-0 inset-x-0 h-16">
