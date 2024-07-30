@@ -7,10 +7,11 @@ import {buttonVariants} from "@/components/ui/button";
 import Cart from "@/components/Cart";
 import {getServerSideUser} from "@/lib/payload-utils";
 import {cookies} from "next/headers";
+import UserAccountNav from "@/components/UserAccountNav";
 
 const Navbar = async () => {
 
-    const  nextCookies = cookies()
+    const nextCookies = cookies()
     const {user} = await getServerSideUser(nextCookies)
 
     return (
@@ -34,15 +35,17 @@ const Navbar = async () => {
                                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
 
                                     {user ? null : (
-                                        <Link href="/sign-in"
-                                              className={buttonVariants({
-                                                  variant: "ghost"
-                                              })}>
+                                        <Link
+                                            href="/sign-in"
+                                            className={buttonVariants({
+                                                variant: "ghost"
+                                            })}
+                                        >
                                             Sign in
                                         </Link>
                                     )}
 
-                                    {user ? null: (
+                                    {user ? null : (
                                         <span
                                             className="h-6 w-px bg-gray-200"
                                             aria-hidden="true"
@@ -50,7 +53,7 @@ const Navbar = async () => {
                                     )}
 
                                     {user ? (
-                                        <p></p>
+                                        <UserAccountNav user={user} />
                                     ) : (
                                         <Link
                                             href="/sign-up"
