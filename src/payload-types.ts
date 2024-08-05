@@ -171,5 +171,6 @@ export interface PayloadMigration {
 
 
 declare module 'payload' {
+  //@ts-expect-error must be declared for payload to work
   export interface GeneratedTypes extends Config {}
 }
