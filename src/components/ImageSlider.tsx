@@ -53,7 +53,7 @@ const ImageSlider = ({urls}: ImageSliderProps) => {
 								!slideConfig.isEnd
 						}
 					)} aria-label="next image">
-					<ChevronRight className="h-4 w-4 text-zinc-700" />
+					<ChevronRight className="h-4 w-4 text-zinc-700" />{' '}
 				</button>
 				<button
 					onClick={(e) => {
@@ -69,11 +69,16 @@ const ImageSlider = ({urls}: ImageSliderProps) => {
 								!slideConfig.isBeginning
 						}
 					)} aria-label="previous image">
-					<ChevronLeft className="h-4 w-4 text-zinc-700" />
+					<ChevronLeft className="h-4 w-4 text-zinc-700" />{' '}
 				</button>
 			</div>
 
 			<Swiper
+				pagination={{
+					renderBullet: (_, className) => {
+						return `<span class="rounded-full transition ${className}"></span>`
+					},
+				}}
 				onSwiper={(swiper) => setSwiper(swiper)}
 				spaceBetween={50}
 				modules={[Pagination]}
