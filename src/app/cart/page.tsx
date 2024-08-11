@@ -1,10 +1,11 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { useCart } from "@/hooks/use-cart";
 import Image from "next/image";
 import { PRODUCT_CATEGORIES } from "@/config";
+import Link from "next/link";
 
 const Page = () => {
 	const {items, removeItem}  = useCart()
@@ -69,6 +70,33 @@ const Page = () => {
 														className="h-full w-full rounded-md object-cover object-center sm:h-48 sm:w-48"
 													/>
 												) : null}
+											</div>
+										</div>
+
+										<div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
+											<div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+												<div>
+													<div className="flex justify-between">
+														<h3 className="text-sm">
+															<Link
+																href={`/product/${product.id}`}
+																className="font-medium text-gray-700 hover:text-gray-800"
+															>
+																{product.name}
+															</Link>
+														</h3>
+													</div>
+
+													<div className="mt-1 flex text-sm">
+														<p className="text-muted-foreground">
+															Category: {label}
+														</p>
+													</div>
+
+													<p className="mt-1 text-sm font-medium text-gray-900">
+														{formatPrice(product.price)}
+													</p>
+												</div>
 											</div>
 										</div>
 									</li>
