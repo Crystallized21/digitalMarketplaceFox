@@ -30,13 +30,14 @@ export const paymentRouter = router({
 			})
 
 			const filteredProducts = products.filter((prod) => Boolean(prod.priceId))
+
 			// Create a new order
 			const order = await payload.create({
 				collection: "orders",
 				data: {
 					_isPaid: false,
 					// @ts-expect-error - TS doesn't know about type
-					products: filteredProducts,
+					products: filteredProducts.map((prod) => prod.id),
 					user: user.id,
 				},
 			})
@@ -72,7 +73,7 @@ export const paymentRouter = router({
 					await stripe.checkout.sessions.create({
 						success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/thank-you?orderId=${order.id}`,
 						cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart`,
-						payment_method_types: ["card", "paypal"],
+						payment_method_types: ["card",],
 						mode: "payment",
 						metadata: {
 							userId: user.id,
@@ -86,8 +87,12 @@ export const paymentRouter = router({
 							}
 						}
 					})
-			} catch (err) {
 
+				return {url: stripeSession.url}
+			} catch (err) {
+				console.log(err);
+
+				return {url: null}
 			}
 		}),
 })
