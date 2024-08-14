@@ -6,6 +6,7 @@ import { stripe } from "../lib/stripe";
 import Stripe from "stripe";
 
 export const paymentRouter = router({
+	// This procedure creates a new session for the user to check out
 	createSession: privateProcedure
 		.input(z.object({productIds: z.array(z.string())}))
 		.mutation(async ({ctx, input}) => {
@@ -18,6 +19,7 @@ export const paymentRouter = router({
 
 			const payload = await getPayloadClient()
 
+			// Get the products from the database
 			const {docs: products} = await payload.find({
 				collection: "products",
 				where: {
@@ -28,7 +30,7 @@ export const paymentRouter = router({
 			})
 
 			const filteredProducts = products.filter((prod) => Boolean(prod.priceId))
-
+			// Create a new order
 			const order = await payload.create({
 				collection: "orders",
 				data: {
@@ -39,14 +41,21 @@ export const paymentRouter = router({
 				},
 			})
 
-			const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] =
-				[]
+			// Create the line items for the session
+			const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = []
 
 			filteredProducts.forEach((product) => {
-				line_items.push({
-					price: product.priceId!,
-					quantity: 1,
-				})
+				if (typeof product.priceId === "string") {
+					line_items.push({
+						price: product.priceId!,
+						quantity: 1,
+					});
+				} else {
+					// If we get here, it means the product is missing a priceId
+					throw new TRPCError({
+						code: "BAD_REQUEST", message: "Invalid priceId"
+					});
+				}
 			})
 
 			line_items.push({
@@ -57,6 +66,7 @@ export const paymentRouter = router({
 				}
 			})
 
+			// Create the session
 			try {
 				const stripeSession =
 					await stripe.checkout.sessions.create({
@@ -64,10 +74,16 @@ export const paymentRouter = router({
 						cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart`,
 						payment_method_types: ["card", "paypal"],
 						mode: "payment",
-						line_items: line_items,
 						metadata: {
 							userId: user.id,
 							orderId: order.id,
+						},
+						line_items,
+						payment_intent_data: {
+							metadata: {
+								userId: user.id,
+								orderId: order.id
+							}
 						}
 					})
 			} catch (err) {

@@ -4,6 +4,7 @@ import { BeforeChangeHook } from "payload/dist/collections/config/types";
 import { Product } from "../../payload-types";
 import { stripe } from "../../lib/stripe";
 
+
 const addUser : BeforeChangeHook<Product> = async  ({req, data}) => {
     const user = req.user
 
@@ -16,31 +17,31 @@ export const Products: CollectionConfig = {
         useAsTitle: "name",
     },
     hooks: {
-      beforeChange: [
-          addUser, async (args) => {
-            if (args.operation === "create") {
-                const data = args.data as Product
+        beforeChange: [
+            addUser, async (args) => {
+                if (args.operation === "create") {
+                    const data = args.data as Product
 
-                const createdProduct = await stripe.products.create({
-                    name: data.name,
-                    default_price_data: {
-                        currency: "USD",
-                        unit_amount: Math.round(data.price * 100),
-                    },
-                })
+                    const createdProduct = await stripe.products.create({
+                        name: data.name,
+                        default_price_data: {
+                            currency: "USD",
+                            unit_amount: Math.round(data.price * 100),
+                        },
+                    })
 
-                const updated: Product = {
-                    ...data,
-                    stripeId: createdProduct.id,
-                    priceId: createdProduct.default_price as string,
+                    const updated: Product = {
+                        ...data,
+                        stripeId: createdProduct.id,
+                        priceId: createdProduct.default_price as string,
+                    }
+
+                    return updated
+                } else if(args.operation == "update") {
+
                 }
-
-                return updated
-            } else if(args.operation == "update") {
-
             }
-          }
-      ]
+        ]
     },
     fields: [
         {
