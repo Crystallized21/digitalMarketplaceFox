@@ -3,7 +3,11 @@ import Image from "next/image";
 import { cookies } from "next/headers";
 import { getPayloadClient } from "@/get-payload";
 import { notFound, redirect } from "next/navigation";
-import { type } from "node:os";
+import { getServerSideUser } from "@/lib/payload-utils";
+import { Product, ProductFile } from "@/payload-types";
+import { PRODUCT_CATEGORIES } from "@/config";
+import { formatPrice } from "@/lib/utils";
+
 
 interface PageProps {
 	searchParams: {[key: string]: string | string[] | undefined};
@@ -14,8 +18,8 @@ const ThankYouPage = async ({searchParams}: PageProps) => {
 	const orderId = searchParams.orderId
 	const nextCookies = cookies()
 
-	const {user} = await getSeverSideUser(nextCookies)
-	const payload = getPayloadClient()
+	const {user} = await getServerSideUser(nextCookies)
+	const payload = await getPayloadClient()
 
 	const {docs: orders} = await payload.find({
 		collection: "orders",
@@ -33,6 +37,7 @@ const ThankYouPage = async ({searchParams}: PageProps) => {
 
 	const orderUserId = typeof order.user === "string"
 		? order.user
+		// @ts-expect-error we know it exists
 		: order.user.id
 
 	if (orderUserId !== user?.id) {
@@ -45,7 +50,7 @@ const ThankYouPage = async ({searchParams}: PageProps) => {
 				<Image
 					fill
 					src="/checkout-thank-you.jpg"
-					className="h-full w-full object-contain object-center"
+					className="h-full w-full object-cover object-center"
 					alt="thank you for your order"
 				/>
 			</div>
@@ -63,16 +68,87 @@ const ThankYouPage = async ({searchParams}: PageProps) => {
 							<p className="mt-2 text-base text-muted-foreground">
 								Your order was processed and your assets are
 								available to download below. We&apos;ve sent
-								your receipt and order details to
+								your receipt and order details to{' '}
 								{typeof order.user !== "string" ? (
 									<span className="font-medium text-gray-900">
+										{/* @ts-expect-error we know it exists */}
 										{order.user.email}
 									</span>
 								) : null }
+								.
 							</p>
 						) : (
-							<p></p>
+							<p className="mt-2 text-base text-muted-foreground">
+								We appreciate your order, and we&apos;re
+								currently processing it. So hang tight and
+								we&apos; send confirmation very soon!
+							</p>
 						)}
+
+						<div className="mt-16 text-sm font-medium">
+							<div className="text-muted-foreground">Order nr.</div>
+							<div className="mt-2 text-gray-900">
+								{order.id}
+							</div>
+
+							<ul className="mt-6 divide-y divide-gray-200 border-t border-gray-200 text-sm font-medium text-muted-foreground">
+								{(order.products as Product[]).map(
+									(product) => {
+										const label = PRODUCT_CATEGORIES.find(
+											({ value }) =>
+												value === product.category
+										)?.label
+
+										const downloadUrl = (
+											product.product_files as ProductFile
+										).url as string
+
+										const { image } = product.images[0]
+
+									return (
+										<li key={product.id} className="flex space-x-6 py-6">
+											<div className="relative h-24 w-24">
+												{typeof image !== "string" && image.url ? (
+													<Image
+														fill
+														src={image.url}
+														alt={`${product.name} image`}
+														className="flex-none rounded-md bg-gray-100 object-cover object-center"
+													/>
+												) : null }
+											</div>
+											<div className="flex-auto flex flex-col justify-between">
+												<div className="space-y-1">
+													<h3 className="text-gray-900">
+														{product.name}
+													</h3>
+
+													<p className="my-1">
+														Category: {label}
+													</p>
+												</div>
+
+												{order._isPaid ? (
+													<a
+														href={downloadUrl}
+														download={product.name}
+														className="text-blue-600 hover:underline underline-offset-2"
+													>
+														Download asset
+													</a>
+												) : null}
+											</div>
+
+											<p className="flex-none font-medium text-gray-900">
+												{formatPrice(product.price)}
+											</p>
+										</li>
+									)
+								})}
+							</ul>
+
+
+						</div>
 					</div>
 				</div>
 			</div>
