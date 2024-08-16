@@ -5,13 +5,21 @@ import {User} from "@/payload-types";
 export const getServerSideUser = async (
     cookies: NextRequest["cookies"] | ReadonlyRequestCookies
 ) => {
-    const token = cookies.get("payload-token")?.value
+    const token = cookies.get("payload-token")?.value;
+
+    if (!token) {
+        throw new Error("No token found in cookies");
+    }
 
     const meRes = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/me`, {
         headers: {
             Authorization: `JWT ${token}`
         }
     });
+
+    if (meRes.status === 404) {
+        throw new Error("User not found");
+    }
 
     if (!meRes.ok) {
         throw new Error(`Failed to fetch user: ${meRes.statusText}`);
