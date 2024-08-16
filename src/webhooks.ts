@@ -5,7 +5,7 @@ import type Stripe from "stripe";
 import { stripe } from "./lib/stripe";
 import { Product } from "./payload-types";
 import { Resend } from "resend";
-import { ReceiptEmailHtml } from "@/components/emails/ReceiptEmail";
+import { ReceiptEmailHtml } from "./components/emails/ReceiptEmail";
 
 const resend = new Resend(process.env.RENSEND_API_KEY)
 

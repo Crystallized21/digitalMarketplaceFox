@@ -1,4 +1,4 @@
-import { privateProcedure, publicProcedure, router } from "@/trpc/trpc";
+import { privateProcedure, publicProcedure, router } from "./trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getPayloadClient } from "../get-payload";

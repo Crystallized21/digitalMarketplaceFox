@@ -51,6 +51,7 @@
     "swiper": "^11.1.9",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "trpc": "^0.11.3",
     "zod": "^3.23.8",
     "zustand": "^4.5.4"
   },
@@ -60,6 +61,7 @@
     "@types/nodemailer": "^6.4.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "copyfiles": "^2.4.1",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.5",
     "nodemon": "^3.1.4",
