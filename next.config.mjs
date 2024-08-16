@@ -7,6 +7,11 @@ const nextConfig = {
 				pathname: "**",
 				port: "3000",
 				protocol: "http",
+			},
+			{
+				hostname: "digital-marketplace-fox.vercel.app",
+				pathname: "**",
+				protocol: "https",
 			}
 		]
 	}
