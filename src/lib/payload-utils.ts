@@ -7,27 +7,25 @@ export const getServerSideUser = async (
 ) => {
     const token = cookies.get("payload-token")?.value;
 
-    if (!token) {
-        throw new Error("No token found in cookies");
-    }
-
     const meRes = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/me`, {
         headers: {
             Authorization: `JWT ${token}`
         }
     });
 
-    if (meRes.status === 404) {
-        throw new Error("User not found");
-    }
-
     if (!meRes.ok) {
-        throw new Error(`Failed to fetch user: ${meRes.statusText}`);
+        if (meRes.status === 404) {
+            throw new Error("Failed to fetch user: Not Found");
+        } else if (meRes.status === 508) {
+            throw new Error("Failed to fetch user: Loop Detected");
+        } else {
+            throw new Error(`Failed to fetch user: ${meRes.statusText}`);
+        }
     }
 
     const contentType = meRes.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("Expected JSON response but received HTML");
+        throw new Error("Received non-JSON response");
     }
 
     const {user} = (await meRes.json()) as {user: User | null};
