@@ -11,9 +11,18 @@ export const getServerSideUser = async (
         headers: {
             Authorization: `JWT ${token}`
         }
-    })
+    });
 
-    const {user} = (await meRes.json()) as {user: User | null}
+    if (!meRes.ok) {
+        throw new Error(`Failed to fetch user: ${meRes.statusText}`);
+    }
 
-    return {user}
-}
+    const contentType = meRes.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Expected JSON response but received HTML");
+    }
+
+    const {user} = (await meRes.json()) as {user: User | null};
+
+    return {user};
+};
