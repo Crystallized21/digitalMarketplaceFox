@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
-const handler = (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextRequest) => {
 	if (req.method === "GET") {
 		const user = {
 			id: 1,
@@ -8,9 +8,9 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
 			email: "john.doe@example.com"
 		};
 
-		res.status(200).json({ user });
+		return NextResponse.json({ user });
 	} else {
-		res.status(405).json({ message: "Method Not Allowed" });
+		return NextResponse.json({ message: "Method Not Allowed" }, { status: 405 });
 	}
 };
 
