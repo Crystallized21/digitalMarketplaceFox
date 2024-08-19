@@ -13,21 +13,6 @@ export const getServerSideUser = async (
         }
     });
 
-    if (!meRes.ok) {
-        if (meRes.status === 404) {
-            throw new Error("Failed to fetch user: Not Found");
-        } else if (meRes.status === 508) {
-            throw new Error("Failed to fetch user: Loop Detected");
-        } else {
-            throw new Error(`Failed to fetch user: ${meRes.statusText}`);
-        }
-    }
-
-    const contentType = meRes.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("Received non-JSON response");
-    }
-
     const {user} = (await meRes.json()) as {user: User | null};
 
     return {user};
