@@ -85,14 +85,12 @@ const Page = async ({params}: PageProps) => {
 
 						<div className="mt-4">
 							<h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-								{/* TODO: fix this later with the as react node */}
-								{product.name as ReactNode}
+								{product.name as string}
 							</h1>
 						</div>
 
 						<section className="mt-4">
 							<div className="flex items-center">
-								{/* TODO: and this */}
 								<p className="font-medium text-gray-900">
 									{formatPrice(product.price as number)}
 								</p>
@@ -104,7 +102,7 @@ const Page = async ({params}: PageProps) => {
 
 							<div className="mt-4 space-y-6">
 								<p className="text-base text-muted-foreground">
-									{product.description as ReactNode}
+									{product.description as string}
 								</p>
 							</div>
 
