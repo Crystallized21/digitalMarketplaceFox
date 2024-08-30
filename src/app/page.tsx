@@ -4,6 +4,8 @@ import {Button, buttonVariants} from "@/components/ui/button";
 import {ArrowDownToLine, CheckCircle, LeafIcon} from "lucide-react";
 import ProductReel from "@/components/ProductReel";
 
+// Define the perks array
+
 const perks = [
     {
         name: "Instant Delivery",
@@ -21,6 +23,8 @@ const perks = [
         description: "We've pledged 1% of sales to the preservation and restoration of the natural environment.",
     },
 ]
+
+// Define the Home component
 
 export default function Home() {
     return (

@@ -10,21 +10,30 @@ import ImageSlider from "@/components/ImageSlider";
 import ProductReel from "@/components/ProductReel";
 import AddToCartButton from "@/components/AddToCartButton";
 
+// define the type of the params object
 interface PageProps {
 	params: {
 		productId: string
 	}
 }
 
+// define the breadcrumbs
+
 const BREADCRUMBS = [
 	{ id: 1, name: 'Home', href: '/' },
 	{ id: 2, name: 'Products', href: '/products' },
 ]
 
+// define the page component
+
 const Page = async ({params}: PageProps) => {
+
+	// get the product id from the params object
 	const { productId } = params
 
 	const payload = await getPayloadClient()
+
+	// get the product from the database
 
 	const { docs: products } = await payload.find({
 		collection: 'products',
@@ -39,6 +48,8 @@ const Page = async ({params}: PageProps) => {
 		},
 	})
 
+	// if the product does not exist, return a 404 page
+
 	const [product] = products
 
 	if (!product) return notFound()
@@ -51,6 +62,8 @@ const Page = async ({params}: PageProps) => {
 	const validUrls = product.images.map(({image}) =>
 		typeof image === "string" ? image : image.url
 	).filter(Boolean) as string[]
+
+	// return the page
 
 	return (
 		<MaxWidthWrapper className="bg-white">

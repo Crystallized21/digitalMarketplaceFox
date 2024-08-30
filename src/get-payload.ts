@@ -4,9 +4,13 @@ import payload, {Payload} from 'payload';
 import {InitOptions} from "payload/config";
 import nodemailer from 'nodemailer';
 
+// Load environment variables
+
 dotenv.config({
     path: path.resolve(__dirname, "../.env")
 });
+
+// Create a nodemailer transporter
 
 const transporter = nodemailer.createTransport({
     host: "smtp.resend.com",
@@ -17,6 +21,8 @@ const transporter = nodemailer.createTransport({
         pass: process.env.RESEND_API_KEY
     }
 })
+
+// Create a cache object to store the client and promise
 
 let cached = (global as any).payload
 
@@ -29,8 +35,9 @@ if (!cached) {
 
 interface Args {
     initOptions?: Partial<InitOptions>
-
 }
+
+// Get the Payload client
 
 export const getPayloadClient = async ({
     initOptions,

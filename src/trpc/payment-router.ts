@@ -96,6 +96,8 @@ export const paymentRouter = router({
 			}
 		}),
 
+	// This procedure is used to poll the status of an order
+
 	pollOrderStatus: privateProcedure
 		.input(z.object({orderId: z.string()}))
 		.query(async ({input}) => {

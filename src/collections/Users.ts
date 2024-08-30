@@ -1,6 +1,8 @@
 import { Access, CollectionConfig } from "payload/types";
 import { PrimaryActionEmailHtml } from "../components/emails/PrimaryActionEmail";
 
+// Access control for the Users collection
+
 const adminsAndUsers: Access = ({req: {user}}) => {
     if (user.role == "admin") return true
 
@@ -10,6 +12,8 @@ const adminsAndUsers: Access = ({req: {user}}) => {
         },
     }
 }
+
+// Collection definition for the Users collection
 
 export const Users: CollectionConfig = {
     slug: "users",

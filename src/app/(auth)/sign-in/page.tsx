@@ -15,8 +15,11 @@ import {trpc} from "@/trpc/client";
 import {toast} from "sonner";
 import {useRouter, useSearchParams} from "next/navigation";
 
+
+// This is the sign-in page
 const Page = () => {
 
+    // Get the search params
     const searchParams = useSearchParams()
     const router = useRouter()
     const isSeller = searchParams.get("as") === "seller"
@@ -30,6 +33,7 @@ const Page = () => {
         router.replace("/sign-in", undefined)
     }
 
+    // Form validation
     const {
         register,
         handleSubmit,
@@ -70,6 +74,8 @@ const Page = () => {
         // send data to server
         signIn({email, password})
     }
+
+    // Return the sign-in form
 
     return (
         <>

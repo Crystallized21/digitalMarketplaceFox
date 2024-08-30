@@ -10,17 +10,24 @@ import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import PaymentStatus from "@/components/PaymentStatus";
 
+// Define the PageProps interface
+
 interface PageProps {
 	searchParams: {[key: string]: string | string[] | undefined};
 }
 
+// Define the ThankYouPage component
 const ThankYouPage = async ({searchParams}: PageProps) => {
+
+	// Extract the orderId from the searchParams
 
 	const orderId = searchParams.orderId
 	const nextCookies = cookies()
 
 	const {user} = await getServerSideUser(nextCookies)
 	const payload = await getPayloadClient()
+
+	// Fetch the order from the database
 
 	const {docs: orders} = await payload.find({
 		collection: "orders",
@@ -31,6 +38,8 @@ const ThankYouPage = async ({searchParams}: PageProps) => {
 			},
 		},
 	})
+
+	// If the order does not exist, return a 404 error
 
 	const [order] = orders
 
@@ -45,11 +54,15 @@ const ThankYouPage = async ({searchParams}: PageProps) => {
 		return redirect(`/sign-in?origin=thank-you?orderId=${order.id}`)
 	}
 
+	// Define the orderTotal variable
+
 	const products = order.products as Product[]
 
 	const orderTotal = products.reduce((total, product) => {
 		return total + product.price
 	}, 0)
+
+	// Return the JSX for the ThankYouPage component
 
 	return (
 		<main className="relative lg:min-h-full">

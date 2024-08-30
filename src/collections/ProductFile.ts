@@ -2,10 +2,14 @@ import {Access, CollectionConfig} from "payload/types";
 import {BeforeChangeHook} from "payload/dist/collections/config/types";
 import {User} from "../payload-types";
 
+// This hook adds the user ID to the data before it is saved
+
 const addUser: BeforeChangeHook = ({req, data}) => {
     const user = req.user as User | null
     return {...data, user: user?.id}
 }
+
+// This access control function checks if the user is an admin or if the user is the owner of the product file or has purchased the product file
 
 const yourOwnAndPurchased: Access = async ({req}) => {
     const user = req.user as User | null
@@ -57,6 +61,8 @@ const yourOwnAndPurchased: Access = async ({req}) => {
         }
     }
 }
+
+// This collection config defines the product_files collection
 
 export const ProductFiles: CollectionConfig = {
     slug: "product_files",

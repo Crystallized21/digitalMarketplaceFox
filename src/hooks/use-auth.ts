@@ -1,6 +1,8 @@
 import {toast} from "sonner";
 import {useRouter} from "next/navigation";
 
+
+// This hook is used to sign out the user.
 export const useAuth = () => {
     const router = useRouter()
 

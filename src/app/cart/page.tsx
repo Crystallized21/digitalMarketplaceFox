@@ -12,6 +12,7 @@ import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
+	// Get the cart items and removeItem function from the useCart hook
 	const {items, removeItem}  = useCart()
 
 	const router = useRouter()
@@ -21,6 +22,8 @@ const Page = () => {
 			if (url) router.push(url)
 		},
 	})
+
+	// Get the product ids from the cart items
 
 	const productIds = items.map(({product}) => product.id)
 
@@ -36,6 +39,7 @@ const Page = () => {
 
 	const fee = 1
 
+	// Render the cart page
 	return (
 		<div className="bg-white">
 			<div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">

@@ -1,6 +1,8 @@
 import {Access, CollectionConfig} from "payload/types";
 import {User} from "@/payload-types";
 
+// This function checks if the user is an admin or has access to images
+
 const isAdminOrHasAccessToImages =
     (): Access =>
         async ({ req }) => {
@@ -15,6 +17,8 @@ const isAdminOrHasAccessToImages =
         },
     }
 }
+
+// This is the Media collection configuration
 
 export const Media: CollectionConfig = {
     slug: "media",

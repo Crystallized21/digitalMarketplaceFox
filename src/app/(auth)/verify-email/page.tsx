@@ -2,16 +2,22 @@ import React from 'react';
 import Image from "next/image";
 import VerifyEmail from "@/components/VerifyEmail";
 
+// Define the props type
 interface PageProps {
     searchParams: {
         [key: string]: string | string[] | undefined
     }
 }
 
+// Define the component
 const Page = ({searchParams}: PageProps) => {
+
+    // Get the token and toEmail from the searchParams
     const token = searchParams.token
     const toEmail = searchParams.to
 
+
+    // Return the component
     return (
         <div className="container relative flex pt-20 flex-col items-center justify-center lg:px-0">
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">

@@ -16,7 +16,11 @@ import {toast} from "sonner";
 import {ZodError} from "zod";
 import {useRouter} from "next/navigation";
 
+// This is the sign-up page
+
 const Page = () => {
+
+    // Form validation
     const {
         register,
         handleSubmit,
@@ -26,6 +30,8 @@ const Page = () => {
     })
 
     const router = useRouter()
+
+    // Create a new user
 
     const {mutate, isLoading} =
         trpc.auth.createPayloadUser.useMutation({
@@ -51,6 +57,8 @@ const Page = () => {
             }
       })
 
+    // Form submission
+
     const onSubmit = ({
         email,
         password
@@ -58,6 +66,8 @@ const Page = () => {
         // send data to server
         mutate({email, password})
     }
+
+    // Render the page
 
     return (
         <>

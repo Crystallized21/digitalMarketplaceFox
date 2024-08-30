@@ -1,5 +1,7 @@
 import React from 'react';
 
+// SellPage component
+
 const SellPage = () => {
     return (
         <div>

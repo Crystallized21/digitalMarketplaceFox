@@ -4,11 +4,15 @@ import { AfterChangeHook, BeforeChangeHook } from "payload/dist/collections/conf
 import { Product, User } from "../../payload-types";
 import { stripe } from "../../lib/stripe";
 
+// Define a type for the user object
+
 const addUser: BeforeChangeHook<Product> = async ({req, data}) => {
     const user = req.user
 
     return {...data, user: user.id}
 }
+
+// sync the user's products with the user object
 
 const syncUser: AfterChangeHook<Product> = async ({req, doc}) => {
     const fullUser = await req.payload.findByID({
@@ -41,11 +45,15 @@ const syncUser: AfterChangeHook<Product> = async ({req, doc}) => {
     }
 }
 
+// Define a function that checks if the user is an admin or has access to the product
+
 const isAdminOrHasAccess = (): Access => ({req: {user: _user}}) => {
     const user = _user as User | undefined
 
     if (!user) return false
     if (user.role === "admin") return true
+
+    // If the user is not an admin, check if the user has access to the product
 
     const userProductIDs = (user.products || []).reduce<
         Array<string>
@@ -66,6 +74,8 @@ const isAdminOrHasAccess = (): Access => ({req: {user: _user}}) => {
         }
     }
 }
+
+// Define the collection configuration
 
 export const Products: CollectionConfig = {
     slug: "products",

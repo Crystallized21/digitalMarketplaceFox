@@ -5,9 +5,13 @@ import { QueryValidator } from "../lib/validators/query-validator";
 import { getPayloadClient } from "../get-payload";
 import { paymentRouter } from "./payment-router";
 
+// Define the app router
+
 export const appRouter = router({
     auth: authRouter,
     payment: paymentRouter,
+
+    // Define a public procedure to get infinite products
 
     getInfiniteProducts: publicProcedure.input(z.object({
         limit: z.number().min(1).max(100),
@@ -28,6 +32,8 @@ export const appRouter = router({
         })
 
         const page = cursor || 1
+
+        // Fetch the products from the payload
 
         const {docs: items, hasNextPage, nextPage} = await payload.find({
             collection: "products",

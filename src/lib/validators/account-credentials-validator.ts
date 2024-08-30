@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+// Define a schema for validating user credentials
+
 export const AuthCredentialsValidator = z.object({
     email: z.string().email(),
     password: z

@@ -9,6 +9,8 @@ import { ReceiptEmailHtml } from "./components/emails/ReceiptEmail";
 
 const resend = new Resend(process.env.RENSEND_API_KEY)
 
+// Stripe webhook handler
+
 export const stripeWebhookHandler = async (
 	req: express.Request,
 	res:express.Response
@@ -48,6 +50,8 @@ export const stripeWebhookHandler = async (
 	if (event.type === 'checkout.session.completed') {
 		const payload = await getPayloadClient()
 
+		// Get user
+
 		const { docs: users } = await payload.find({
 			collection: 'users',
 			where: {
@@ -60,6 +64,8 @@ export const stripeWebhookHandler = async (
 		const [user] = users
 
 		if (!user) return res.status(404).json({ error: 'No such user exists.' })
+
+		// Get order
 
 		const { docs: orders } = await payload.find({
 			collection: 'orders',

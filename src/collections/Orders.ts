@@ -1,5 +1,7 @@
 import { Access, CollectionConfig } from "payload/types"
 
+// Access control function that checks if the user is an admin or the owner of the order
+
 const yourOwn: Access = ({ req: { user } }) => {
     if (user.role === "admin") return true
 
@@ -9,6 +11,8 @@ const yourOwn: Access = ({ req: { user } }) => {
         },
     }
 }
+
+// orders collection configuration
 
 export const Orders: CollectionConfig = {
     slug: "orders",

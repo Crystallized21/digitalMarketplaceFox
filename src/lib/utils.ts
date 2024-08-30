@@ -2,9 +2,13 @@ import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { Metadata } from "next";
 
+// This function is used to merge classnames
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+// This function is used to format prices
 
 export function formatPrice(
     price: number | string,
@@ -24,6 +28,8 @@ export function formatPrice(
     maximumFractionDigits: 2,
   }).format(numericPrice)
 }
+
+// This function is used to construct metadata
 
 export function constructMetadata({
     title = 'DigitalFox - the marketplace for digital assets',

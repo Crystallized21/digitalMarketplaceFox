@@ -4,7 +4,11 @@ import {getPayloadClient} from "../get-payload";
 import {TRPCError} from "@trpc/server";
 import {z} from "zod";
 
+// Auth router
+
 export const authRouter = router({
+
+    // Create a new user
     createPayloadUser: publicProcedure
         .input(AuthCredentialsValidator)
         .mutation(async ({input}) => {
@@ -37,6 +41,8 @@ export const authRouter = router({
             return {success: true, sentToEmail: email}
     }),
 
+    // Verify email
+
     verifyEmail: publicProcedure
         .input(z.object({token: z.string()}))
         .query(async ({ input }) => {
@@ -54,6 +60,8 @@ export const authRouter = router({
             }
             return {success: true}
     }),
+
+    // Sign in
 
     signIn: publicProcedure
         .input(AuthCredentialsValidator)

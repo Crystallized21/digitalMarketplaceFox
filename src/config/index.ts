@@ -1,3 +1,5 @@
+// Description: This file contains all the configuration for the application.
+
 export const PRODUCT_CATEGORIES = [
     {
         label: 'UI Kits',

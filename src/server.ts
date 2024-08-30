@@ -15,6 +15,8 @@ import { parse } from "url";
 const app = express()
 const PORT = Number(process.env.PORT) || 3000
 
+// Create a context for TRPC
+
 const createContext = ({
     req,
     res
@@ -23,6 +25,8 @@ const createContext = ({
     res
 })
 
+// Infer the type of the context
+
 export type ExpressContext = inferAsyncReturnType<typeof createContext>
 
 export type WebhookRequest = IncomingMessage & {
@@ -30,6 +34,8 @@ export type WebhookRequest = IncomingMessage & {
 }
 
 const start = async () => {
+
+    // Stripe Webhook
 
     const webhookMiddleware = bodyParser.json({
         verify(req: WebhookRequest, _, buffer) {
@@ -65,6 +71,8 @@ const start = async () => {
 
         return nextApp.render(req, res, "/cart", parsedUrl.query)
     })
+
+    // Add the cart router to the app
 
     app.use("/cart", cartRouter)
 
