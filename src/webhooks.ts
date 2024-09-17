@@ -41,6 +41,8 @@ export const stripeWebhookHandler = async (
 
 	const session = event.data.object as Stripe.Checkout.Session
 
+	// check if user and order id is present in metadata
+
 	if (!session?.metadata?.userId || !session?.metadata?.orderId) {
 		return res.status(400).send(`Webhook Error: No user present in metadata`)
 	}
