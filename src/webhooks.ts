@@ -1,4 +1,5 @@
 import express from "express";
+import he from "he";
 import { WebhookRequest } from "./server";
 import { getPayloadClient } from "./get-payload";
 import type Stripe from "stripe";
@@ -33,7 +34,7 @@ export const stripeWebhookHandler = async (
 			.status(400)
 			.send(
 				`Webhook Error: ${err instanceof Error 
-					? err.message 
+					? he.escape(err.message)
 					: 'Unknown Error'
 				}`
 			)
